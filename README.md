@@ -1,4 +1,4 @@
-# 🧽 Jack Tan (譚傑) - 海綿寶寶風格個人網站 & 數獨遊戲
+# 🧽 Jack Tan (譚人傑) - 海綿寶寶風格個人網站 & 數獨遊戲
 
 [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-https%3A%2F%2Faghoniln.github.io%2F0916%2F-brightgreen?style=for-the-badge&logo=github)](https://aghoniln.github.io/0916/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -20,7 +20,7 @@
 
 ---
 
-## 👨‍💻 關於 Jack Tan (譚傑)
+## 👨‍💻 關於 Jack Tan (譚人傑)
 
 - 🎓 **學歷 / 研究所**: **中興大學電機工程研究所** (Graduate Institute of Electrical Engineering, NCHU)
 - 🛠️ **核心專長**: **Python** | **C / C++** | **AI / Machine Learning** | JavaScript | UI/UX Design | 系統架構
@@ -97,4 +97,4 @@ Here are great ideas to make your personal page and GitHub profile even more imp
 
 ---
 
-© 2026 Jack Tan. Built with ❤️ and Vanilla Web Technologies.
+© 2026 Jack Tan (譚人傑). Built with ❤️ and Vanilla Web Technologies.
