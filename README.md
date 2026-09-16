@@ -1,11 +1,22 @@
 # 🌟 Jack Tan - Personal Page & Time Dashboard
 
-Welcome to the official personal website repository of **Jack Tan**!
-
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-https%3A%2F%2Faghoniln.github.io%2F0916%2F-brightgreen?style=for-the-badge&logo=github)](https://aghoniln.github.io/0916/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)](#)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)](#)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)](#)
+
+> 🔗 **Live Website Demo**: [https://aghoniln.github.io/0916/](https://aghoniln.github.io/0916/)
+
+---
+
+## 📸 Snapcast / Page Preview
+
+### Dark Mode (Default)
+![Jack Tan Personal Page Dark Mode Preview](preview.png)
+
+### Light Mode
+![Jack Tan Personal Page Light Mode Preview](preview_light.png)
 
 ---
 
@@ -15,6 +26,7 @@ Hi there! 👋 I'm **Jack Tan**, a passionate Creative Software Engineer & Desig
 
 - 📍 **Location / Timezone**: Global Remote (UTC+8)
 - 💼 **Role**: Creative Software Engineer / Full-Stack Web Developer
+- 🌐 **Live Website**: [https://aghoniln.github.io/0916/](https://aghoniln.github.io/0916/)
 - 🛠️ **Skills**: JavaScript / TypeScript, HTML5 / Modern CSS, System Architecture, UI/UX Design
 - 🎯 **Goals**: Crafting smooth, responsive web applications and delivering exceptional digital experiences.
 
