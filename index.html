@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="zh-TW" data-theme="spongebob">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jack Tan | Personal Web Page</title>
+    <title>Jack Tan (譚傑) | 個人網站 & 數獨遊戲</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
         rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,135 +19,155 @@
 
 <body>
 
-    <!-- Background Animated Blur Blobs -->
-    <div class="bg-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
+    <!-- Floating Sea Bubbles -->
+    <div class="bubbles-container">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
     </div>
 
     <div class="app-container">
-        <!-- Header -->
+        <!-- Header Controls -->
         <header>
             <div class="brand-logo">
-                <div class="brand-icon">JT</div>
+                <div class="brand-icon">🧽</div>
                 <span>Jack Tan</span>
             </div>
             <div class="controls">
                 <button id="formatToggle" class="btn-icon">
-                    <i class="fas fa-clock"></i> 12H Format
+                    <i class="fas fa-clock"></i> 12H 制
                 </button>
-                <button id="themeToggle" class="btn-icon" aria-label="Toggle Theme">
-                    <i id="themeIcon" class="fas fa-sun"></i>
+                <button id="themeToggle" class="btn-icon" aria-label="切換主題">
+                    <span id="themeLabel">🧽 經典黃</span>
                 </button>
             </div>
         </header>
 
         <!-- Main Grid -->
         <main class="main-grid">
-            <!-- Left Column: Personal Profile -->
+            <!-- Left Column: Personal Profile & Skills -->
             <section class="glass-card profile-card">
                 <div class="profile-avatar-wrapper">
-                    <div class="avatar-ring">
-                        <div class="avatar-inner">JT</div>
+                    <div class="avatar-sponge-box">
+                        <span class="avatar-text">JT</span>
                     </div>
-                    <div class="status-badge" title="Available for projects"></div>
+                    <div class="status-badge" title="準備就緒"></div>
                 </div>
 
-                <h1 class="profile-name">Jack Tan</h1>
-                <div class="profile-title">Electrical Engineering & AI Specialist</div>
+                <h1 class="profile-name">Jack Tan (譚傑)</h1>
+                <div class="profile-title">電機工程 & 人工智慧專長</div>
 
                 <div class="badge-tag">
-                    <i class="fas fa-graduation-cap"></i> 中興大學電機工程研究所
+                    <i class="fas fa-graduation-cap" style="color: #ef4444;"></i> 中興大學電機工程研究所
                 </div>
 
                 <p class="profile-bio">
-                    Passionate about AI, C/C++, Python development, and modern web application architecture. Welcome to
-                    my personal space!
+                    專注於 AI 人工智慧、C/C++ 高效能系統、Python 開發與現代網頁架構設計。歡迎來到我的個人網站！
                 </p>
 
+                <!-- Skill Chips -->
                 <div class="skills-container">
-                    <span class="skill-chip">Python</span>
-                    <span class="skill-chip">C / C++</span>
-                    <span class="skill-chip">AI / Machine Learning</span>
-                    <span class="skill-chip">JavaScript</span>
-                    <span class="skill-chip">UI/UX Design</span>
-                    <span class="skill-chip">System Architecture</span>
+                    <span class="skill-chip">🐍 Python</span>
+                    <span class="skill-chip">⚡ C / C++</span>
+                    <span class="skill-chip">🤖 AI / Machine Learning</span>
+                    <span class="skill-chip">🌐 JavaScript</span>
+                    <span class="skill-chip">🎨 UI / UX Design</span>
+                    <span class="skill-chip">🏗️ System Architecture</span>
                 </div>
 
+                <!-- Social Links -->
                 <div class="social-links">
-                    <a href="#" class="social-btn" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://github.com/aghoniln/0916" class="social-btn" title="GitHub" target="_blank"><i
+                            class="fab fa-github"></i></a>
                     <a href="#" class="social-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" class="social-btn" title="Twitter"><i class="fab fa-x-twitter"></i></a>
                     <a href="mailto:jack.tan@example.com" class="social-btn" title="Email"><i
                             class="fas fa-envelope"></i></a>
                 </div>
             </section>
 
-            <!-- Right Column: Time Dashboard & Analog Clock -->
+            <!-- Right Column: Real-Time Clock -->
             <section class="glass-card time-dashboard">
                 <div class="clock-header">
                     <div class="clock-title">
-                        <i class="fas fa-globe-asia" style="color: var(--accent-secondary);"></i>
-                        <span>Local Real-Time Clock</span>
+                        <i class="fas fa-globe-asia" style="color: var(--accent-primary);"></i>
+                        <span>即時本地時鐘</span>
                     </div>
                     <span id="tzOffset" class="tz-badge">GMT+8</span>
                 </div>
 
-                <!-- Digital Clock Banner -->
                 <div class="digital-clock-container">
                     <div id="digitalTime" class="digital-time">--:--:--</div>
                     <div id="digitalDate" class="digital-date">-- -- --</div>
                 </div>
 
-                <!-- Canvas Analog Clock -->
                 <div class="clock-visual-section">
-                    <canvas id="analogClock" width="220" height="220"></canvas>
+                    <canvas id="analogClock" width="200" height="200"></canvas>
                 </div>
             </section>
         </main>
 
-        <!-- Secondary Grid: World Clocks & Interactive Time Tools -->
+        <!-- Secondary Grid: Interactive Tabbed Apps (Sudoku Game & World Clock) -->
         <section class="glass-card secondary-grid">
             <div class="tab-nav">
-                <button class="tab-btn active" data-tab="worldClock">
-                    <i class="fas fa-earth-americas"></i> World Clocks
+                <button class="tab-btn active" data-tab="sudokuSection">
+                    <i class="fas fa-puzzle-piece"></i> 🧩 數獨遊戲
                 </button>
-                <button class="tab-btn" data-tab="focusTimer">
-                    <i class="fas fa-hourglass-half"></i> Focus Timer
-                </button>
-                <button class="tab-btn" data-tab="stopwatch">
-                    <i class="fas fa-stopwatch"></i> Stopwatch
+                <button class="tab-btn" data-tab="worldClock">
+                    <i class="fas fa-earth-americas"></i> 🌍 世界時鐘
                 </button>
             </div>
 
-            <!-- Tab 1: World Clocks -->
-            <div id="worldClock" class="tab-content active">
+            <!-- Tab 1: 🧩 數獨遊戲 (Sudoku Game) -->
+            <div id="sudokuSection" class="tab-content active">
+                <div class="sudoku-container">
+                    <div class="sudoku-header">
+                        <div class="sudoku-title-badge">
+                            <span>🧩 數獨遊戲</span>
+                        </div>
+                        <div class="sudoku-diff-selector">
+                            <button class="btn-diff active" data-diff="easy">簡單</button>
+                            <button class="btn-diff" data-diff="medium">中等</button>
+                            <button class="btn-diff" data-diff="hard">困難</button>
+                        </div>
+                    </div>
+
+                    <!-- Sudoku Stats Bar -->
+                    <div class="sudoku-stats">
+                        <span id="sudokuMistakes">錯誤: 0/3</span>
+                        <span id="sudokuTimer">時間: 00:00</span>
+                    </div>
+
+                    <!-- Sudoku 9x9 Grid -->
+                    <div id="sudokuBoard" class="sudoku-board"></div>
+
+                    <!-- Numpad Controls -->
+                    <div class="sudoku-numpad">
+                        <button class="btn-num" data-val="1">1</button>
+                        <button class="btn-num" data-val="2">2</button>
+                        <button class="btn-num" data-val="3">3</button>
+                        <button class="btn-num" data-val="4">4</button>
+                        <button class="btn-num" data-val="5">5</button>
+                        <button class="btn-num" data-val="6">6</button>
+                        <button class="btn-num" data-val="7">7</button>
+                        <button class="btn-num" data-val="8">8</button>
+                        <button class="btn-num" data-val="9">9</button>
+                        <button id="sudokuErase" class="btn-num action"><i class="fas fa-eraser"></i> 清除</button>
+                        <button id="sudokuHint" class="btn-num action"><i class="fas fa-lightbulb"></i> 提示</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: 世界時鐘 -->
+            <div id="worldClock" class="tab-content">
                 <div id="worldClockGrid" class="world-clock-grid"></div>
-            </div>
-
-            <!-- Tab 2: Focus Timer -->
-            <div id="focusTimer" class="tab-content">
-                <div class="tool-display" id="timerDisplay">25:00</div>
-                <div class="tool-controls">
-                    <button id="timerStart" class="btn-primary">Start Focus</button>
-                    <button id="timerReset" class="btn-secondary">Reset</button>
-                </div>
-            </div>
-
-            <!-- Tab 3: Stopwatch -->
-            <div id="stopwatch" class="tab-content">
-                <div class="tool-display" id="swDisplay">00:00.00</div>
-                <div class="tool-controls">
-                    <button id="swStart" class="btn-primary">Start</button>
-                    <button id="swReset" class="btn-secondary">Reset</button>
-                </div>
             </div>
         </section>
 
         <!-- Footer -->
         <footer>
-            <p>© 2026 Jack Tan. All rights reserved. | Personal Dashboard & Live Time Tracker</p>
+            <p>© 2026 Jack Tan (譚傑) | 中興大學電機工程研究所 | Spongebob Bikini Bottom Edition</p>
         </footer>
     </div>
 

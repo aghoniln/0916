@@ -1,4 +1,4 @@
-# 🌟 Jack Tan - Personal Page & Time Dashboard
+# 🧽 Jack Tan (譚傑) - 海綿寶寶風格個人網站 & 數獨遊戲
 
 [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-https%3A%2F%2Faghoniln.github.io%2F0916%2F-brightgreen?style=for-the-badge&logo=github)](https://aghoniln.github.io/0916/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -6,29 +6,42 @@
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)](#)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)](#)
 
-> 🔗 **Live Website Demo**: [https://aghoniln.github.io/0916/](https://aghoniln.github.io/0916/)
+> 🔗 **Live Website**: [https://aghoniln.github.io/0916/](https://aghoniln.github.io/0916/)
 
 ---
 
-## 📸 Snapcast / Page Preview
+## 📸 網站預覽 (Snapcast & Feature Previews)
 
-### Dark Mode (Default)
-![Jack Tan Personal Page Dark Mode Preview](preview.png)
+### 🧽 海綿寶寶風格主頁 (Spongebob Theme Main View)
+![Jack Tan Spongebob Theme Preview](preview.png)
 
-### Light Mode
-![Jack Tan Personal Page Light Mode Preview](preview_light.png)
+### 🧩 數獨遊戲 (Sudoku Game Board)
+![Sudoku Game Board Preview](preview_sudoku.png)
 
 ---
 
-## 👨‍💻 About Me (Jack Tan)
+## 👨‍💻 關於 Jack Tan (譚傑)
 
-Hi there! 👋 I'm **Jack Tan**, a software engineer specializing in **AI**, **C/C++**, **Python**, and modern web systems.
+- 🎓 **學歷 / 研究所**: **中興大學電機工程研究所** (Graduate Institute of Electrical Engineering, NCHU)
+- 🛠️ **核心專長**: **Python** | **C / C++** | **AI / Machine Learning** | JavaScript | UI/UX Design | 系統架構
+- 🌐 **線上個人網站**: [https://aghoniln.github.io/0916/](https://aghoniln.github.io/0916/)
 
-- 🎓 **Education / Subject**: 中興大學電機工程研究所 (Graduate Institute of Electrical Engineering, NCHU)
-- 🛠️ **Core Skills**: **Python** | **C / C++** | **AI / Machine Learning** | JavaScript | System Architecture
-- 📍 **Location / Timezone**: Global Remote (UTC+8)
-- 🌐 **Live Website**: [https://aghoniln.github.io/0916/](https://aghoniln.github.io/0916/)
-- 🎯 **Goals**: Building high-performance intelligent algorithms, embedded/C++ systems, and modern web application interfaces.
+---
+
+## ✨ 網站亮點與特色功能
+
+1. 🧽 **海綿寶寶主題風格 (Bikini Bottom Theme)**:
+   - 經典海綿黃、派大星粉、深海藍三種主題動態切換。
+   - 動態海洋浮動氣泡背景與 Q 版幾何視覺卡片。
+
+2. 🧩 **數獨遊戲 (Sudoku Game)**:
+   - 完整 9x9 互動式數獨棋盤。
+   - 提供「簡單 / 中等 / 困難」三種難度等級選擇。
+   - 包含計時器、錯誤次數統計 (上限 3 次)、數字鍵盤、清除與提示功能。
+
+3. ⏰ **即時時鐘與世界時鐘 Dashboard**:
+   - 數字時鐘 (支援 12H/24H 切換)、HTML5 Canvas 平滑秒針模擬時鐘。
+   - 全球主要城市 (東京、倫敦、紐約、新加坡、雪梨、巴黎) 即時世界時鐘。
 
 ---
 

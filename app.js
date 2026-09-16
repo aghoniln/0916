@@ -1,353 +1,465 @@
-// Jack Tan Personal Page Application Logic
+// Jack Tan Spongebob Personal Page & Sudoku Game Engine
 
 document.addEventListener('DOMContentLoaded', () => {
-  // State
-  let is24Hour = false;
-  let currentTheme = localStorage.getItem('theme') || 'dark';
+    // Theme State
+    let currentTheme = localStorage.getItem('spongebob-theme') || 'spongebob';
+    document.documentElement.setAttribute('data-theme', currentTheme);
 
-  // DOM Elements
-  const themeToggleBtn = document.getElementById('themeToggle');
-  const themeIcon = document.getElementById('themeIcon');
-  const formatToggleBtn = document.getElementById('formatToggle');
-  
-  const digitalTimeEl = document.getElementById('digitalTime');
-  const digitalDateEl = document.getElementById('digitalDate');
-  const tzOffsetEl = document.getElementById('tzOffset');
+    const themeToggleBtn = document.getElementById('themeToggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            if (currentTheme === 'spongebob') currentTheme = 'patrick';
+            else if (currentTheme === 'patrick') currentTheme = 'deepsea';
+            else currentTheme = 'spongebob';
 
-  const canvas = document.getElementById('analogClock');
-  const ctx = canvas ? canvas.getContext('2d') : null;
-
-  // Initialize Theme
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  updateThemeIcon();
-
-  if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', currentTheme);
-      localStorage.setItem('theme', currentTheme);
-      updateThemeIcon();
-    });
-  }
-
-  function updateThemeIcon() {
-    if (themeIcon) {
-      themeIcon.className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-    }
-  }
-
-  // Format Toggle
-  if (formatToggleBtn) {
-    formatToggleBtn.addEventListener('click', () => {
-      is24Hour = !is24Hour;
-      formatToggleBtn.textContent = is24Hour ? '24H Format' : '12H Format';
-      updateClocks();
-    });
-  }
-
-  // Update Clocks Engine
-  function updateClocks() {
-    const now = new Date();
-
-    // 1. Digital Clock
-    if (digitalTimeEl) {
-      let hours = now.getHours();
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      let ampm = '';
-
-      if (!is24Hour) {
-        ampm = hours >= 12 ? ' PM' : ' AM';
-        hours = hours % 12;
-        hours = hours ? hours : 12; // hour 0 is 12
-      }
-      const formattedHours = String(hours).padStart(2, '0');
-      digitalTimeEl.innerHTML = `${formattedHours}:${minutes}:<span style="font-size:0.6em; opacity:0.8;">${seconds}</span><span style="font-size:0.4em; opacity:0.7; margin-left:8px;">${ampm}</span>`;
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('spongebob-theme', currentTheme);
+            updateThemeLabel();
+        });
     }
 
-    // Date
-    if (digitalDateEl) {
-      const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-      digitalDateEl.textContent = now.toLocaleDateString('en-US', options);
+    function updateThemeLabel() {
+        const label = document.getElementById('themeLabel');
+        if (!label) return;
+        if (currentTheme === 'spongebob') label.textContent = '🧽 經典黃';
+        else if (currentTheme === 'patrick') label.textContent = '🌸 派大星粉';
+        else label.textContent = '🌊 深海藍';
+    }
+    updateThemeLabel();
+
+    // ----------------------------------------------------
+    // Live Clocks Engine
+    // ----------------------------------------------------
+    let is24Hour = false;
+    const formatToggleBtn = document.getElementById('formatToggle');
+    const digitalTimeEl = document.getElementById('digitalTime');
+    const digitalDateEl = document.getElementById('digitalDate');
+    const tzOffsetEl = document.getElementById('tzOffset');
+    const canvas = document.getElementById('analogClock');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+
+    if (formatToggleBtn) {
+        formatToggleBtn.addEventListener('click', () => {
+            is24Hour = !is24Hour;
+            formatToggleBtn.textContent = is24Hour ? '24H 制' : '12H 制';
+            updateClocks();
+        });
     }
 
-    // Timezone Offset
-    if (tzOffsetEl) {
-      const offset = -now.getTimezoneOffset() / 60;
-      const sign = offset >= 0 ? '+' : '';
-      tzOffsetEl.textContent = `GMT${sign}${offset}`;
+    function updateClocks() {
+        const now = new Date();
+
+        if (digitalTimeEl) {
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            let ampm = '';
+
+            if (!is24Hour) {
+                ampm = hours >= 12 ? ' PM' : ' AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+            }
+            const formattedHours = String(hours).padStart(2, '0');
+            digitalTimeEl.innerHTML = `${formattedHours}:${minutes}:<span style="font-size:0.65em; opacity:0.8;">${seconds}</span><span style="font-size:0.45em; margin-left:6px;">${ampm}</span>`;
+        }
+
+        if (digitalDateEl) {
+            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+            digitalDateEl.textContent = now.toLocaleDateString('zh-TW', options);
+        }
+
+        if (tzOffsetEl) {
+            const offset = -now.getTimezoneOffset() / 60;
+            const sign = offset >= 0 ? '+' : '';
+            tzOffsetEl.textContent = `GMT${sign}${offset}`;
+        }
+
+        if (canvas && ctx) drawAnalogClock(now);
+        updateWorldClocks(now);
     }
 
-    // 2. Analog Clock
-    if (canvas && ctx) {
-      drawAnalogClock(now);
+    function drawAnalogClock(now) {
+        const size = canvas.width;
+        const center = size / 2;
+        const radius = center - 10;
+
+        ctx.clearRect(0, 0, size, size);
+
+        // Clock Face Outer Border
+        ctx.beginPath();
+        ctx.arc(center, center, radius + 2, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(center, center, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+
+        // Dial Marks
+        for (let i = 0; i < 60; i++) {
+            const angle = (i * Math.PI) / 30;
+            const isHourMark = i % 5 === 0;
+            const markLength = isHourMark ? 12 : 5;
+
+            const x1 = center + (radius - markLength) * Math.sin(angle);
+            const y1 = center - (radius - markLength) * Math.cos(angle);
+            const x2 = center + (radius - 2) * Math.sin(angle);
+            const y2 = center - (radius - 2) * Math.cos(angle);
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = isHourMark ? '#0284c7' : '#94a3b8';
+            ctx.lineWidth = isHourMark ? 3 : 1.5;
+            ctx.stroke();
+        }
+
+        const hours = now.getHours() % 12;
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+        const ms = now.getMilliseconds();
+
+        const smoothSecond = seconds + ms / 1000;
+        const smoothMinute = minutes + smoothSecond / 60;
+        const smoothHour = hours + smoothMinute / 60;
+
+        drawHand(ctx, center, center, (smoothHour * Math.PI) / 6, radius * 0.5, 6, '#1e293b');
+        drawHand(ctx, center, center, (smoothMinute * Math.PI) / 30, radius * 0.72, 4, '#0284c7');
+        drawHand(ctx, center, center, (smoothSecond * Math.PI) / 30, radius * 0.85, 2, '#ef4444');
+
+        ctx.beginPath();
+        ctx.arc(center, center, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = '#ef4444';
+        ctx.fill();
     }
 
-    // 3. World Clocks
-    updateWorldClocks(now);
-  }
-
-  // Analog Canvas Clock Renderer
-  function drawAnalogClock(now) {
-    const size = canvas.width;
-    const center = size / 2;
-    const radius = center - 12;
-
-    ctx.clearRect(0, 0, size, size);
-
-    // Clock Face Outer Border Glow
-    ctx.beginPath();
-    ctx.arc(center, center, radius + 4, 0, 2 * Math.PI);
-    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-    ctx.strokeStyle = isDark ? 'rgba(99, 102, 241, 0.4)' : 'rgba(79, 70, 229, 0.2)';
-    ctx.lineWidth = 6;
-    ctx.stroke();
-
-    // Clock Background
-    ctx.beginPath();
-    ctx.arc(center, center, radius, 0, 2 * Math.PI);
-    ctx.fillStyle = isDark ? '#0f172a' : '#ffffff';
-    ctx.fill();
-    ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Dial Marks
-    for (let i = 0; i < 60; i++) {
-      const angle = (i * Math.PI) / 30;
-      const isHourMark = i % 5 === 0;
-      const markLength = isHourMark ? 14 : 6;
-      
-      const x1 = center + (radius - markLength) * Math.sin(angle);
-      const y1 = center - (radius - markLength) * Math.cos(angle);
-      const x2 = center + (radius - 2) * Math.sin(angle);
-      const y2 = center - (radius - 2) * Math.cos(angle);
-
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.strokeStyle = isHourMark 
-        ? (isDark ? '#38bdf8' : '#0284c7') 
-        : (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)');
-      ctx.lineWidth = isHourMark ? 3 : 1.5;
-      ctx.stroke();
+    function drawHand(ctx, cx, cy, angle, length, width, color) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = width;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = color;
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + length * Math.sin(angle), cy - length * Math.cos(angle));
+        ctx.stroke();
+        ctx.restore();
     }
 
-    // Time calculations
-    const hours = now.getHours() % 12;
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
-    const ms = now.getMilliseconds();
+    const worldCities = [
+        { name: 'Tokyo', zone: 'Asia/Tokyo' },
+        { name: 'London', zone: 'Europe/London' },
+        { name: 'New York', zone: 'America/New_York' },
+        { name: 'Singapore', zone: 'Asia/Singapore' },
+        { name: 'Sydney', zone: 'Australia/Sydney' },
+        { name: 'Paris', zone: 'Europe/Paris' }
+    ];
 
-    const smoothSecond = seconds + ms / 1000;
-    const smoothMinute = minutes + smoothSecond / 60;
-    const smoothHour = hours + smoothMinute / 60;
+    function updateWorldClocks(now) {
+        const grid = document.getElementById('worldClockGrid');
+        if (!grid) return;
 
-    // Hour Hand
-    drawHand(ctx, center, center, (smoothHour * Math.PI) / 6, radius * 0.5, 6, isDark ? '#f8fafc' : '#1e293b');
-    // Minute Hand
-    drawHand(ctx, center, center, (smoothMinute * Math.PI) / 30, radius * 0.72, 4, isDark ? '#38bdf8' : '#0284c7');
-    // Second Hand
-    drawHand(ctx, center, center, (smoothSecond * Math.PI) / 30, radius * 0.85, 2, '#f43f5e');
-
-    // Center Pivot
-    ctx.beginPath();
-    ctx.arc(center, center, 6, 0, 2 * Math.PI);
-    ctx.fillStyle = '#f43f5e';
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(center, center, 3, 0, 2 * Math.PI);
-    ctx.fillStyle = '#ffffff';
-    ctx.fill();
-  }
-
-  function drawHand(ctx, cx, cy, angle, length, width, color) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.lineWidth = width;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = color;
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(cx + length * Math.sin(angle), cy - length * Math.cos(angle));
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  // World Clocks Data
-  const worldCities = [
-    { name: 'Tokyo', zone: 'Asia/Tokyo' },
-    { name: 'London', zone: 'Europe/London' },
-    { name: 'New York', zone: 'America/New_York' },
-    { name: 'Singapore', zone: 'Asia/Singapore' },
-    { name: 'Sydney', zone: 'Australia/Sydney' },
-    { name: 'Paris', zone: 'Europe/Paris' }
-  ];
-
-  function updateWorldClocks(now) {
-    const grid = document.getElementById('worldClockGrid');
-    if (!grid) return;
-
-    if (grid.children.length === 0) {
-      grid.innerHTML = worldCities.map(city => `
-        <div class="world-clock-item" id="wc-${city.name.replace(/\s+/g, '')}">
+        if (grid.children.length === 0) {
+            grid.innerHTML = worldCities.map(city => `
+        <div class="world-clock-item">
           <div class="world-city">${city.name}</div>
-          <div class="world-time" id="time-${city.name.replace(/\s+/g, '')}">--:--</div>
-          <div class="world-diff" id="diff-${city.name.replace(/\s+/g, '')}">--</div>
+          <div class="world-time" id="time-${city.name}">--:--</div>
+          <div class="world-diff" id="diff-${city.name}">--</div>
         </div>
       `).join('');
-    }
-
-    worldCities.forEach(city => {
-      const timeEl = document.getElementById(`time-${city.name.replace(/\s+/g, '')}`);
-      const diffEl = document.getElementById(`diff-${city.name.replace(/\s+/g, '')}`);
-
-      if (timeEl) {
-        try {
-          const cityTimeStr = now.toLocaleTimeString('en-US', {
-            timeZone: city.zone,
-            hour12: !is24Hour,
-            hour: '2-digit',
-            minute: '2-digit'
-          });
-          timeEl.textContent = cityTimeStr;
-        } catch (e) {
-          timeEl.textContent = '--:--';
         }
-      }
 
-      if (diffEl) {
-        try {
-          const cityDate = new Date(now.toLocaleString('en-US', { timeZone: city.zone }));
-          const localDate = new Date(now.toLocaleString('en-US'));
-          const diffHours = Math.round((cityDate - localDate) / (1000 * 60 * 60));
-          const diffText = diffHours === 0 ? 'Same time' : (diffHours > 0 ? `+${diffHours} hrs` : `${diffHours} hrs`);
-          diffEl.textContent = diffText;
-        } catch (e) {
-          diffEl.textContent = '';
+        worldCities.forEach(city => {
+            const timeEl = document.getElementById(`time-${city.name}`);
+            const diffEl = document.getElementById(`diff-${city.name}`);
+
+            if (timeEl) {
+                try {
+                    const str = now.toLocaleTimeString('en-US', {
+                        timeZone: city.zone,
+                        hour12: !is24Hour,
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    timeEl.textContent = str;
+                } catch (e) { timeEl.textContent = '--:--'; }
+            }
+
+            if (diffEl) {
+                try {
+                    const cityDate = new Date(now.toLocaleString('en-US', { timeZone: city.zone }));
+                    const localDate = new Date(now.toLocaleString('en-US'));
+                    const diffHours = Math.round((cityDate - localDate) / (1000 * 60 * 60));
+                    diffEl.textContent = diffHours === 0 ? '時區相同' : (diffHours > 0 ? `+${diffHours} 小時` : `${diffHours} 小時`);
+                } catch (e) { diffEl.textContent = ''; }
+            }
+        });
+    }
+
+    updateClocks();
+    setInterval(updateClocks, 100);
+
+    // Tab Switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.dataset.tab;
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+
+            btn.classList.add('active');
+            const targetContent = document.getElementById(target);
+            if (targetContent) targetContent.classList.add('active');
+        });
+    });
+
+    // ----------------------------------------------------
+    // 🧩 數獨遊戲 (Sudoku Game Engine)
+    // ----------------------------------------------------
+    const sudokuPuzzles = {
+        easy: {
+            puzzle: [
+                [5, 3, 0, 0, 7, 0, 0, 0, 0],
+                [6, 0, 0, 1, 9, 5, 0, 0, 0],
+                [0, 9, 8, 0, 0, 0, 0, 6, 0],
+                [8, 0, 0, 0, 6, 0, 0, 0, 3],
+                [4, 0, 0, 8, 0, 3, 0, 0, 1],
+                [7, 0, 0, 0, 2, 0, 0, 0, 6],
+                [0, 6, 0, 0, 0, 0, 2, 8, 0],
+                [0, 0, 0, 4, 1, 9, 0, 0, 5],
+                [0, 0, 0, 0, 8, 0, 0, 7, 9]
+            ],
+            solution: [
+                [5, 3, 4, 6, 7, 8, 9, 1, 2],
+                [6, 7, 2, 1, 9, 5, 3, 4, 8],
+                [1, 9, 8, 3, 4, 2, 5, 6, 7],
+                [8, 5, 9, 7, 6, 1, 4, 2, 3],
+                [4, 2, 6, 8, 5, 3, 7, 9, 1],
+                [7, 1, 3, 9, 2, 4, 8, 5, 6],
+                [9, 6, 1, 5, 3, 7, 2, 8, 4],
+                [2, 8, 7, 4, 1, 9, 6, 3, 5],
+                [3, 4, 5, 2, 8, 6, 1, 7, 9]
+            ]
+        },
+        medium: {
+            puzzle: [
+                [0, 0, 0, 6, 0, 0, 4, 0, 0],
+                [7, 0, 0, 0, 0, 3, 6, 0, 0],
+                [0, 0, 0, 0, 9, 1, 0, 8, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 5, 0, 1, 8, 0, 0, 0, 3],
+                [0, 0, 0, 3, 0, 6, 0, 4, 5],
+                [0, 4, 0, 2, 0, 0, 0, 6, 0],
+                [9, 0, 3, 0, 0, 0, 0, 0, 0],
+                [0, 2, 0, 0, 0, 0, 1, 0, 0]
+            ],
+            solution: [
+                [5, 8, 1, 6, 7, 2, 4, 3, 9],
+                [7, 9, 2, 8, 4, 3, 6, 5, 1],
+                [3, 6, 4, 5, 9, 1, 7, 8, 2],
+                [4, 3, 8, 9, 5, 7, 2, 1, 6],
+                [6, 5, 9, 1, 8, 4, 2, 7, 3],
+                [2, 1, 7, 3, 2, 6, 8, 4, 5],
+                [1, 4, 5, 2, 3, 8, 9, 6, 7],
+                [9, 7, 3, 4, 1, 5, 8, 2, 6],
+                [8, 2, 6, 7, 6, 9, 1, 9, 4]
+            ]
+        },
+        hard: {
+            puzzle: [
+                [0, 2, 0, 6, 0, 8, 0, 0, 0],
+                [5, 8, 0, 0, 0, 9, 7, 0, 0],
+                [0, 0, 0, 0, 4, 0, 0, 0, 0],
+                [3, 7, 0, 0, 0, 0, 5, 0, 0],
+                [6, 0, 0, 0, 0, 0, 0, 0, 4],
+                [0, 0, 8, 0, 0, 0, 0, 1, 3],
+                [0, 0, 0, 0, 2, 0, 0, 0, 0],
+                [0, 0, 9, 8, 0, 0, 0, 3, 6],
+                [0, 0, 0, 3, 0, 6, 0, 9, 0]
+            ],
+            solution: [
+                [1, 2, 4, 6, 7, 8, 3, 5, 9],
+                [5, 8, 3, 1, 9, 9, 7, 4, 2],
+                [9, 6, 7, 2, 4, 5, 1, 8, 3],
+                [3, 7, 1, 4, 8, 2, 5, 6, 9],
+                [6, 9, 5, 7, 1, 3, 8, 2, 4],
+                [2, 4, 8, 9, 6, 5, 8, 1, 3],
+                [8, 3, 6, 5, 2, 1, 9, 7, 4],
+                [4, 1, 9, 8, 5, 7, 2, 3, 6],
+                [7, 5, 2, 3, 9, 6, 4, 9, 1]
+            ]
         }
-      }
-    });
-  }
+    };
 
-  // Initial call and set 100ms interval for smooth second hand analog clock
-  updateClocks();
-  setInterval(updateClocks, 100);
+    let currentDiff = 'easy';
+    let selectedRow = -1;
+    let selectedCol = -1;
+    let currentBoard = [];
+    let givenMask = [];
+    let solutionBoard = [];
+    let mistakes = 0;
+    let sudokuTimerSeconds = 0;
+    let sudokuTimerInterval = null;
 
-  // Tab Navigation
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  const tabContents = document.querySelectorAll('.tab-content');
+    const sudokuBoardEl = document.getElementById('sudokuBoard');
+    const mistakesEl = document.getElementById('sudokuMistakes');
+    const timerEl = document.getElementById('sudokuTimer');
 
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.tab;
-      tabBtns.forEach(b => b.classList.remove('active'));
-      tabContents.forEach(c => c.classList.remove('active'));
+    function initSudoku(difficulty = 'easy') {
+        currentDiff = difficulty;
+        mistakes = 0;
+        sudokuTimerSeconds = 0;
+        selectedRow = -1;
+        selectedCol = -1;
 
-      btn.classList.add('active');
-      const targetContent = document.getElementById(target);
-      if (targetContent) targetContent.classList.add('active');
-    });
-  });
+        if (mistakesEl) mistakesEl.textContent = `錯誤: 0/3`;
+        if (timerEl) timerEl.textContent = `時間: 00:00`;
 
-  // Stopwatch Logic
-  let swInterval = null;
-  let swStartTime = 0;
-  let swElapsed = 0;
-  let swRunning = false;
+        clearInterval(sudokuTimerInterval);
+        sudokuTimerInterval = setInterval(() => {
+            sudokuTimerSeconds++;
+            const m = Math.floor(sudokuTimerSeconds / 60);
+            const s = sudokuTimerSeconds % 60;
+            if (timerEl) timerEl.textContent = `時間: ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }, 1000);
 
-  const swDisplay = document.getElementById('swDisplay');
-  const swStartBtn = document.getElementById('swStart');
-  const swResetBtn = document.getElementById('swReset');
+        const puzzleData = sudokuPuzzles[difficulty] || sudokuPuzzles.easy;
+        currentBoard = puzzleData.puzzle.map(row => [...row]);
+        solutionBoard = puzzleData.solution.map(row => [...row]);
+        givenMask = puzzleData.puzzle.map(row => row.map(val => val !== 0));
 
-  if (swStartBtn && swDisplay) {
-    swStartBtn.addEventListener('click', () => {
-      if (!swRunning) {
-        swRunning = true;
-        swStartTime = Date.now() - swElapsed;
-        swInterval = setInterval(updateStopwatch, 10);
-        swStartBtn.textContent = 'Pause';
-        swStartBtn.style.background = '#f43f5e';
-      } else {
-        swRunning = false;
-        clearInterval(swInterval);
-        swStartBtn.textContent = 'Start';
-        swStartBtn.style.background = 'var(--accent-primary)';
-      }
-    });
-
-    if (swResetBtn) {
-      swResetBtn.addEventListener('click', () => {
-        swRunning = false;
-        clearInterval(swInterval);
-        swElapsed = 0;
-        swDisplay.textContent = '00:00.00';
-        swStartBtn.textContent = 'Start';
-        swStartBtn.style.background = 'var(--accent-primary)';
-      });
+        renderSudokuBoard();
     }
-  }
 
-  function updateStopwatch() {
-    swElapsed = Date.now() - swStartTime;
-    const mins = Math.floor(swElapsed / 60000);
-    const secs = Math.floor((swElapsed % 60000) / 1000);
-    const ms = Math.floor((swElapsed % 1000) / 10);
+    function renderSudokuBoard() {
+        if (!sudokuBoardEl) return;
+        sudokuBoardEl.innerHTML = '';
 
-    swDisplay.textContent = 
-      `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${String(ms).padStart(2, '0')}`;
-  }
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+                const cell = document.createElement('div');
+                cell.className = 'sudoku-cell';
+                cell.dataset.row = r;
+                cell.dataset.col = c;
 
-  // Focus Timer Logic (Pomodoro 25 min)
-  let timerInterval = null;
-  let timerSeconds = 25 * 60;
-  let timerRunning = false;
+                const val = currentBoard[r][c];
+                if (val !== 0) cell.textContent = val;
 
-  const timerDisplay = document.getElementById('timerDisplay');
-  const timerStartBtn = document.getElementById('timerStart');
-  const timerResetBtn = document.getElementById('timerReset');
+                if (givenMask[r][c]) {
+                    cell.classList.add('given');
+                } else if (val !== 0) {
+                    cell.classList.add('user-input');
+                }
 
-  if (timerStartBtn && timerDisplay) {
-    timerStartBtn.addEventListener('click', () => {
-      if (!timerRunning) {
-        timerRunning = true;
-        timerInterval = setInterval(updateTimer, 1000);
-        timerStartBtn.textContent = 'Pause';
-        timerStartBtn.style.background = '#f43f5e';
-      } else {
-        timerRunning = false;
-        clearInterval(timerInterval);
-        timerStartBtn.textContent = 'Start Focus';
-        timerStartBtn.style.background = 'var(--accent-primary)';
-      }
+                if (r === selectedRow && c === selectedCol) {
+                    cell.classList.add('selected');
+                } else if (selectedRow !== -1 && (r === selectedRow || c === selectedCol ||
+                    (Math.floor(r / 3) === Math.floor(selectedRow / 3) && Math.floor(c / 3) === Math.floor(selectedCol / 3)))) {
+                    cell.classList.add('highlighted');
+                }
+
+                cell.addEventListener('click', () => {
+                    selectedRow = r;
+                    selectedCol = c;
+                    renderSudokuBoard();
+                });
+
+                sudokuBoardEl.appendChild(cell);
+            }
+        }
+    }
+
+    function handleSudokuInput(num) {
+        if (selectedRow === -1 || selectedCol === -1) return;
+        if (givenMask[selectedRow][selectedCol]) return; // locked initial cell
+
+        const targetVal = solutionBoard[selectedRow][selectedCol];
+
+        if (num === 0) {
+            // Erase
+            currentBoard[selectedRow][selectedCol] = 0;
+        } else {
+            currentBoard[selectedRow][selectedCol] = num;
+            if (num !== targetVal) {
+                mistakes++;
+                if (mistakesEl) mistakesEl.textContent = `錯誤: ${mistakes}/3`;
+                if (mistakes >= 3) {
+                    alert('⚠️ 錯誤達到 3 次！重新開始遊戲！');
+                    initSudoku(currentDiff);
+                    return;
+                }
+            } else {
+                checkSudokuWin();
+            }
+        }
+        renderSudokuBoard();
+    }
+
+    function checkSudokuWin() {
+        let win = true;
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+                if (currentBoard[r][c] !== solutionBoard[r][c]) {
+                    win = false;
+                    break;
+                }
+            }
+        }
+        if (win) {
+            clearInterval(sudokuTimerInterval);
+            alert('🎉 恭喜！你成功完成了數獨遊戲！ (You Solved the Sudoku!)');
+        }
+    }
+
+    // Bind Numpad Buttons
+    const numpadBtns = document.querySelectorAll('.btn-num');
+    numpadBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const val = parseInt(btn.dataset.val);
+            handleSudokuInput(val);
+        });
     });
 
-    if (timerResetBtn) {
-      timerResetBtn.addEventListener('click', () => {
-        timerRunning = false;
-        clearInterval(timerInterval);
-        timerSeconds = 25 * 60;
-        renderTimerDisplay();
-        timerStartBtn.textContent = 'Start Focus';
-        timerStartBtn.style.background = 'var(--accent-primary)';
-      });
-    }
-  }
+    // Difficulty Switchers
+    const diffBtns = document.querySelectorAll('.btn-diff');
+    diffBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            diffBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            initSudoku(btn.dataset.diff);
+        });
+    });
 
-  function updateTimer() {
-    if (timerSeconds > 0) {
-      timerSeconds--;
-      renderTimerDisplay();
-    } else {
-      clearInterval(timerInterval);
-      timerRunning = false;
-      alert('Focus session complete! Take a break.');
-    }
-  }
+    // Erase & Hint Controls
+    const btnErase = document.getElementById('sudokuErase');
+    const btnHint = document.getElementById('sudokuHint');
 
-  function renderTimerDisplay() {
-    if (!timerDisplay) return;
-    const mins = Math.floor(timerSeconds / 60);
-    const secs = timerSeconds % 60;
-    timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  }
+    if (btnErase) {
+        btnErase.addEventListener('click', () => handleSudokuInput(0));
+    }
+
+    if (btnHint) {
+        btnHint.addEventListener('click', () => {
+            if (selectedRow !== -1 && selectedCol !== -1 && !givenMask[selectedRow][selectedCol]) {
+                handleSudokuInput(solutionBoard[selectedRow][selectedCol]);
+            }
+        });
+    }
+
+    // Keyboard input listener for Sudoku
+    document.addEventListener('keydown', (e) => {
+        if (selectedRow === -1 || selectedCol === -1) return;
+        if (e.key >= '1' && e.key <= '9') {
+            handleSudokuInput(parseInt(e.key));
+        } else if (e.key === 'Backspace' || e.key === 'Delete') {
+            handleSudokuInput(0);
+        }
+    });
+
+    // Initialize Sudoku Game
+    initSudoku('easy');
 });
