@@ -314,6 +314,15 @@ header {
     text-shadow: 2px 2px 0 #ffffff;
 }
 
+.profile-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    position: relative;
+    z-index: 2;
+}
+
 .status-badge {
     position: absolute;
     bottom: -4px;
