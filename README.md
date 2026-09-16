@@ -22,13 +22,13 @@
 
 ## 👨‍💻 About Me (Jack Tan)
 
-Hi there! 👋 I'm **Jack Tan**, a passionate Creative Software Engineer & Designer focused on building modern, high-performance web applications with intuitive UI/UX design. 
+Hi there! 👋 I'm **Jack Tan**, a software engineer specializing in **AI**, **C/C++**, **Python**, and modern web systems.
 
+- 🎓 **Education / Subject**: 中興大學電機工程研究所 (Graduate Institute of Electrical Engineering, NCHU)
+- 🛠️ **Core Skills**: **Python** | **C / C++** | **AI / Machine Learning** | JavaScript | System Architecture
 - 📍 **Location / Timezone**: Global Remote (UTC+8)
-- 💼 **Role**: Creative Software Engineer / Full-Stack Web Developer
 - 🌐 **Live Website**: [https://aghoniln.github.io/0916/](https://aghoniln.github.io/0916/)
-- 🛠️ **Skills**: JavaScript / TypeScript, HTML5 / Modern CSS, System Architecture, UI/UX Design
-- 🎯 **Goals**: Crafting smooth, responsive web applications and delivering exceptional digital experiences.
+- 🎯 **Goals**: Building high-performance intelligent algorithms, embedded/C++ systems, and modern web application interfaces.
 
 ---
 
